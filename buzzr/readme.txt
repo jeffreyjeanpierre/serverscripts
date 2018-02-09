@@ -1,0 +1,1 @@
+''' This will scan a document for a term and then send an alert via email to whichever account is configured in this script. Make sure to allow for application authentication via your server. This also needs authentication with your email server to send emails on your behalf, and may require a local web/email server to send the emails'''

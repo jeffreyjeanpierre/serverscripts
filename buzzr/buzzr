@@ -1,0 +1,85 @@
+import os
+import smtplib
+import datetime
+os.system('color 0b')
+
+recipient = 'user@gmail.com'
+
+def scan(recipient):
+    recipient = recipient
+    alert_counter = 0
+    error_code = 0
+    desktop_log = os.path.normpath("C:/awesomelabz/buzzr/log.txt")
+    x = []
+    y = []
+    z = []
+    # Please change the path value to the path of the log file to be scanned.
+    # Also, change the error value to the term to be found.
+    path = "C:/awesomelabz/buzzr/inputToScan.txt"
+    error = "hello"
+    log = open(path, "r+")
+    for i in log:
+        x.append(i)
+    for i in x:
+        y.append(i.split())
+    for i in y:
+        for i in i:
+            z.append(i)
+    term = error
+    try:
+        for i in z:
+            if i == term:
+                alert_counter += 1
+        result = ('There were ' + str(alert_counter) + ' alerts discovered at: ')
+        to = recipient
+        smtp_username = #enter email here
+        smtp_password = #enter password here
+        subject = "Server alerts"
+        no_alert = "No Alerts"
+        print(result + str(datetime.datetime.now()) + '.\n')
+        error_code = 0
+        try:
+            smtpserver = smtplib.SMTP("smtp.gmail.com",587)
+            smtpserver.ehlo()
+            smtpserver.starttls()
+            smtpserver.ehlo
+            smtpserver.login(smtp_username, smtp_password)
+            if alert_counter >= 1:
+                header = 'To:' + to + '\n' + 'From: ' + smtp_username + '\n' + 'Subject:' + subject + '\n'
+            else:
+                header = 'To:' + to + '\n' + 'From: ' + smtp_username + '\n' + 'Subject:' + no_alert + '\n'
+            msg_auto = (header + '\n ' + result + str(datetime.datetime.now()) + '. \n\n')
+        except:
+            print("\nError connecting to smtp server.")
+            error_code = 1
+        try:
+            smtpserver.sendmail(smtp_username, to, msg_auto)
+            print ('Email notification successfully sent.')
+            error_code = 0
+        except:
+            print ('Failed to send alert notifications by email. ')
+            error_code = 2
+    except:
+        print("Script unable to continue. Alerts have not been sent. Please manually check the logs for any errors.")
+        error_code = 3
+    log.close()
+    try:
+        log_obj = open(desktop_log, "a")
+        if error_code == 0:
+            log_obj.write(result + str(datetime.datetime.now()) + ".\nEmail notification successfully sent.\n\n")
+        elif error_code == 2:
+            log_obj.write("-----Failed to send alert notifications by email on " + str(datetime.datetime.now()) + ".\n\n")
+        elif error_code == 1:
+            log_obj.write("-----Error connecting to smtp server on " + str(datetime.datetime.now()) + ".\n\n")
+        elif error_code == 3:
+            print("-----Script unable to continue. Alerts have not been sent. Please manually check the logs for any errors.\n\n")
+        else:
+            pass
+
+        log_obj.close()
+    except:
+        print("Error writing to local log file located at " + str(desktop_log))
+
+scan(recipient)
+print("")
+os.system('pause')
