@@ -1,0 +1,1 @@
+This pulls from a flat csv file and splits each line into a position in an array, generates data from processing those lines, and spits out new files. Comes with a field for loading string values for text files. Minimal touch required to update this program which does three major things: Import file, do work to file, generate new files.
